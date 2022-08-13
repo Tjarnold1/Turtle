@@ -4,6 +4,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import com.google.gson.Gson;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -47,9 +48,11 @@ public class Main {
         System.out.println(lowStockInventory);
 
         //TODO: Return JSON containing the candies for which the stock is less than 25% of it's capacity
+        List<InventoryItem> finalLowStockInventory = lowStockInventory;
+        Gson gson = new Gson();
         get("/low-stock", (request, response) -> {
-            return null;
-        });
+            return finalLowStockInventory;
+        }, gson::toJson);
 
         //TODO: Return JSON containing the total cost of restocking candy
         post("/restock-cost", (request, response) -> {
