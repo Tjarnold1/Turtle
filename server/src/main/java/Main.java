@@ -36,7 +36,7 @@ public class Main {
         //This is required to allow the React app to communicate with this API
         before((request, response) -> response.header("Access-Control-Allow-Origin", "http://localhost:3000"));
 
-        //Initializing my inventory list that I want to return, and denoting the files I want to read from.
+        // Denoting the files I want to read from, and initializing their file streams
         String inventoryFileName = "C:\\Users\\Student\\source\\repos\\individual\\projects\\TopBlocAssessment\\code-challenge\\server\\resources\\Inventory.xlsx";
         String distributorFileName = "C:\\Users\\Student\\source\\repos\\individual\\projects\\TopBlocAssessment\\code-challenge\\server\\resources\\Distributors.xlsx";
         try {
@@ -45,10 +45,19 @@ public class Main {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        // Initializing my low stock items, and distributor prices with the relevant items.
         List<InventoryItem> lowStockInventory = new ArrayList<>();
         Map<String, Double> prices = new HashMap<>();
         lowStockInventory = inventoryReaderDAO.retrieveLowStockInventory();
         prices = distributorReaderDAO.retrieveLowestPrices();
+
+        // Setting the prices of the items to their distributor price.
+        for(int i = 0; i < lowStockInventory.size(); i++) {
+            InventoryItem tempItem = lowStockInventory.get(i);
+            tempItem.setLowestReplacementCost(prices.get(tempItem.getId()));
+            lowStockInventory.set(i, tempItem);
+        }
 
         //TODO: Return JSON containing the candies for which the stock is less than 25% of it's capacity
         List<InventoryItem> finalLowStockInventory = lowStockInventory;

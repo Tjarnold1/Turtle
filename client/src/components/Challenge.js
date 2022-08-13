@@ -1,3 +1,5 @@
+import ItemRow from "../components/ItemRow"
+
 export default function Challenge() {
   return (
     <>
@@ -12,6 +14,8 @@ export default function Challenge() {
           </tr>
         </thead>
         <tbody>
+          {lowStockItems.map((item) => <ItemRow props={item}></ItemRow>)
+}
           {/* 
           TODO: Create an <ItemRow /> component that's rendered for every inventory item. The component
           will need an input element in the Order Amount column that will take in the order amount and 

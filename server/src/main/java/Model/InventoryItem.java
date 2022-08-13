@@ -55,4 +55,6 @@ public class InventoryItem {
     public void setLowestReplacementCost(double lowestReplacementCost) {
         this.lowestReplacementCost = lowestReplacementCost;
     }
+
+
 }
