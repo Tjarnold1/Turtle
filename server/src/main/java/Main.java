@@ -1,4 +1,5 @@
 import Model.InventoryItem;
+import dao.FileDistributorsDAO;
 import dao.FileInventoryDAO;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -9,9 +10,7 @@ import com.google.gson.Gson;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import static spark.Spark.*;
 
@@ -20,6 +19,7 @@ public class Main {
     public static void main(String[] args) {
 
         FileInventoryDAO inventoryReaderDAO = null;
+        FileDistributorsDAO distributorReaderDAO = null;
 
         //This is required to allow GET and POST requests with the header 'content-type'
         options("/*",
@@ -38,14 +38,17 @@ public class Main {
 
         //Initializing my inventory list that I want to return, and denoting the files I want to read from.
         String inventoryFileName = "C:\\Users\\Student\\source\\repos\\individual\\projects\\TopBlocAssessment\\code-challenge\\server\\resources\\Inventory.xlsx";
+        String distributorFileName = "C:\\Users\\Student\\source\\repos\\individual\\projects\\TopBlocAssessment\\code-challenge\\server\\resources\\Distributors.xlsx";
         try {
             inventoryReaderDAO = new FileInventoryDAO(new File(inventoryFileName));
+            distributorReaderDAO = new FileDistributorsDAO(new File(distributorFileName));
         } catch (Exception e) {
             e.printStackTrace();
         }
         List<InventoryItem> lowStockInventory = new ArrayList<>();
+        Map<String, Double> prices = new HashMap<>();
         lowStockInventory = inventoryReaderDAO.retrieveLowStockInventory();
-        System.out.println(lowStockInventory);
+        prices = distributorReaderDAO.retrieveLowestPrices();
 
         //TODO: Return JSON containing the candies for which the stock is less than 25% of it's capacity
         List<InventoryItem> finalLowStockInventory = lowStockInventory;
