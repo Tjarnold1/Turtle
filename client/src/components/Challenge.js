@@ -11,7 +11,20 @@ export default function Challenge() {
     }
   }
 
+  async function getRestockCost(order) {
+    const {data, status} = await inventoryService.retrieveTotalCost(order);
+    if(status === 200) {
+      setRestockCost(data);
+    }
+  }
+
+  function updateRestockOrder(order) {
+    setRestockOrder([...restockOrder, ...order])
+  }
+
   const [ lowStockItems, setLowStockItems ] = useState([]);
+  const [ restockOrder, setRestockOrder ] = useState([]);
+  const [ restockCost, setRestockCost ] = useState(0);
   return (
     <>
       <table>
@@ -30,7 +43,8 @@ export default function Challenge() {
             name={item.name} 
             id={item.id} 
             numberInStock={item.numberInStock} 
-            capacity={item.capacity} 
+            capacity={item.capacity}
+            setRestockOrder={updateRestockOrder}
             key={item.name} 
           /> )}
           {/* 
@@ -41,12 +55,12 @@ export default function Challenge() {
         </tbody>
       </table>
       {/* TODO: Display total cost returned from the server */}
-      <div>Total Cost: </div>
+      <div>Total Cost: {restockCost} </div>
       {/* 
       TODO: Add event handlers to these buttons that use the Java API to perform their relative actions.
       */}
       <button onClick={() => getLowStockItems()}>Get Low-Stock Items</button>
-      <button >Determine Re-Order Cost</button>
+      <button onClick={() => getRestockCost(restockOrder)}>Determine Re-Order Cost</button>
     </>
   );
 }
