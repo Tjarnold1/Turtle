@@ -5,6 +5,8 @@ public class InventoryItem {
     private String name;
     private int numberInStock;
     private int capacity;
+
+    // The IDs are numbers in the data, but if I'm not doing any math operations on them, I prefer to store them as strings.
     private String id;
 
     //Initializing replacement cost to -1 so that I know I need to set an initial value when iterating through the distributors prices.
