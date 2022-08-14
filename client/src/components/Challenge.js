@@ -19,8 +19,22 @@ export default function Challenge() {
   }
 
   function updateRestockOrder(order) {
-    setRestockOrder([...restockOrder, ...order])
-  }
+    if(restockOrder.length === 0) {
+      setRestockOrder([...order]);
+    } else {
+      let index = restockOrder.findIndex((item) => {
+        return item.id === order[0].id;
+      })
+      if(index === -1) {
+        setRestockOrder([...restockOrder, ...order]);
+      } else {  
+        let tempArray = [...restockOrder];
+        tempArray[index] = order[0];
+        setRestockOrder([...tempArray]);
+      }
+    }
+    }
+  
 
   const [ lowStockItems, setLowStockItems ] = useState([]);
   const [ restockOrder, setRestockOrder ] = useState([]);

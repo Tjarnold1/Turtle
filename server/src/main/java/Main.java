@@ -1,4 +1,5 @@
 import Model.InventoryItem;
+import Model.OrderItem;
 import dao.FileDistributorsDAO;
 import dao.FileInventoryDAO;
 import org.apache.poi.ss.usermodel.Cell;
@@ -68,8 +69,21 @@ public class Main {
 
         //TODO: Return JSON containing the total cost of restocking candy
         post("/restock-cost", (request, response) -> {
-            return null;
-        });
+            //Read in the orders from the request body
+            OrderItem[] orders = gson.fromJson(request.body(), OrderItem[].class);
+
+            //Initialize a final cost, and iterate through the items to determine how much to spend
+            double finalCost = 0;
+            for(int i = 0; i < orders.length; i++) {
+                for(int j = 0; j < finalLowStockInventory.size(); j++) {
+                    if(orders[i].getId().equals(finalLowStockInventory.get(j).getId())) {
+                        finalCost += orders[i].getQuantity() * finalLowStockInventory.get(j).getLowestReplacementCost();
+                    }
+                }
+            }
+
+            return finalCost;
+        }, gson::toJson);
 
     }
 
