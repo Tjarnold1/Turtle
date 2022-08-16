@@ -69,7 +69,7 @@ export default function Challenge() {
         </tbody>
       </table>
       {/* TODO: Display total cost returned from the server */}
-      <div>Total Cost: {restockCost} </div>
+      <div>Total Cost: ${restockCost} </div>
       {/* 
       TODO: Add event handlers to these buttons that use the Java API to perform their relative actions.
       */}
